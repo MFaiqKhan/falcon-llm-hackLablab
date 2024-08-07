@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from ..services import rag_service, falcon_service
+from ..services import falcon_service
 #from ..audio_recorder import record_audio_with_vad
 #from .speech_to_text import transcribe_audio
 #from .text_to_speech import synthesize_audio
@@ -167,8 +167,8 @@ def audio_chat():
     if not query:
         return jsonify({"error": "Failed to transcribe audio"}), 500
     
-    # Process query using RAG and Falcon LLM
-    response = rag_service.process_query(query)
+    # Process query using Falcon LLM with integrated RAG
+    response = falcon_service.process_query(query)
     
     # Synthesize response to speech
     audio_response = synthesize_audio(response)
@@ -192,11 +192,10 @@ def text_chat():
     print("query-----", query)
     
     if not query:
-        
         return jsonify({"error": "No query provided"}), 400
     
-    # Process query using RAG and Falcon LLM
-    response = rag_service.process_query(query)
+    # Process query using Falcon LLM with integrated RAG
+    response = falcon_service.process_query(query)
     print("response----", response)
     
     return jsonify({
